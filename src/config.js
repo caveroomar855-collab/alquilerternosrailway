@@ -28,3 +28,6 @@ export const config = {
   jwtExpiresIn: pick('JWT_EXPIRES_IN') ?? '12h',
   reportsBucket: pick('REPORTS_BUCKET') ?? 'reports',
 };
+
+console.log('[config] url prefix:', config.supabaseUrl.slice(0, 24));
+console.log('[config] key prefix:', config.supabaseServiceKey.slice(0, 16));
