@@ -9,6 +9,7 @@ const fallbacks = {
   JWT_SECRET: 'super-secret',
   JWT_EXPIRES_IN: '12h',
   REPORTS_BUCKET: 'reports',
+  AUTH_MODE: 'supabase',
 };
 
 const pick = (key) => process.env[key] ?? fallbacks[key] ?? undefined;
@@ -27,7 +28,17 @@ export const config = {
   jwtSecret: pick('JWT_SECRET') ?? 'secret',
   jwtExpiresIn: pick('JWT_EXPIRES_IN') ?? '12h',
   reportsBucket: pick('REPORTS_BUCKET') ?? 'reports',
+  authMode: pick('AUTH_MODE') ?? 'supabase',
+  localUsers: (pick('LOCAL_USERS') ?? '')
+    .split('|')
+    .map((entry) => {
+      const [username, password, role = 'ADMIN'] = entry.split(':');
+      if (!username || !password) return null;
+      return { username, password, role };
+    })
+    .filter(Boolean),
 };
 
 console.log('[config] url prefix:', config.supabaseUrl.slice(0, 24));
 console.log('[config] key prefix:', config.supabaseServiceKey.slice(0, 16));
+console.log('[config] auth mode:', config.authMode);
